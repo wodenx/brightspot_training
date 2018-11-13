@@ -1,20 +1,21 @@
-package bex.training.character;
+package bex.training.actor;
 
 import brightspot.core.permalink.ExpressDefaultPermalinkRule;
 import com.psddev.cms.db.Site;
 import com.psddev.dari.db.Record;
+import com.psddev.dari.util.ObjectUtils;
 
-public class HeroPermalinkRule extends Record implements ExpressDefaultPermalinkRule {
+public class ActorPermalinkRule extends Record implements ExpressDefaultPermalinkRule {
 
     @Override
     public String createPermalink(Site site, Object object) {
 
-        if (!(object instanceof Hero)) {
+        if (!(object instanceof Actor)) {
             return null;
         }
 
-        Hero hero = (Hero) object;
-        String heroSlug = hero.asSluggableData().getSlug();
-        return "/hero/" + heroSlug;
+        Actor actor = (Actor) object;
+        String actorSlug = actor.asSluggableData().getSlug();
+        return ObjectUtils.isBlank(actorSlug) ? null : "/actors/" + actorSlug;
     }
 }

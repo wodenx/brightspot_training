@@ -73,6 +73,16 @@
         </dependency>
 
         <dependency>
+            <groupId>com.psddev.component-lib</groupId>
+            <artifactId>classification</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.psddev.component-lib</groupId>
+            <artifactId>api-auth</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>javax.el</groupId>
             <artifactId>javax.el-api</artifactId>
             <version>3.0.0</version>

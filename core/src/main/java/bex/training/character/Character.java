@@ -163,7 +163,7 @@ public abstract class Character extends Content implements AutoPermalink,
 
     @Override
     public String getPromotableDescriptionFallback() {
-        return getShortBiography();
+        return RichTextUtils.richTextToPlainText(getShortBiography());
     }
 
     @Override
