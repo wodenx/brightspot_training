@@ -1,0 +1,18 @@
+{{~#block "ActorPage" override="/core/page/ContentPage.hbs"~}}
+    {{#element "mainContent" noWith="true"}}
+        <div class="{{elementName}}">
+
+            {{#element "image"}}
+                <div class="{{elementName}}">{{this}}</div>
+            {{/element}}
+
+            {{#element "name"}}
+                <div class="{{elementName}}">{{this}}</div>
+            {{/element}}
+
+            {{#element "biography"}}
+                <div class="{{elementName}}">{{this}}</div>
+            {{/element}}
+        </div>
+    {{/element}}
+{{~/block~}}

@@ -1,0 +1,14 @@
+{
+  "_include": "_SourceActorPage.json",
+  "_hidden": false,
+
+  "biography": {
+    "_include": "/_group/RichText.json"
+  },
+
+  "image": {
+    "_include": "/core/image/Image.json"
+  },
+
+  "name": "Steve Rodgers"
+}

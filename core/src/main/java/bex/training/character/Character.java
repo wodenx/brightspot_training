@@ -1,5 +1,15 @@
 package bex.training.character;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import bex.training.actor.Actor;
+import bex.training.actor.ActorAssociation;
 import bex.training.util.TrainingUtils;
 import brightspot.core.image.ImageOption;
 import brightspot.core.link.Linkable;
@@ -19,25 +29,18 @@ import com.psddev.dari.db.Recordable;
 import com.psddev.dari.util.ObjectUtils;
 import com.psddev.dari.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 @Seo.TitleFields("getSeoTitle")
 @Seo.DescriptionFields("getSeoDescription")
 @Seo.KeywordsFields("getSeoKeywords")
 @ToolUi.Main
 @Recordable.PreviewField("image/image/file")
-public abstract class Character extends Content implements AutoPermalink,
-                                                           Linkable,
-                                                           PromotableWithOverrides,
-                                                           Shareable,
-                                                           Sluggable,
-                                                           Taggable {
+public abstract class Character extends Content implements ActorAssociation,
+        AutoPermalink,
+        Linkable,
+        PromotableWithOverrides,
+        Shareable,
+        Sluggable,
+        Taggable {
 
     // Main.
 
@@ -65,6 +68,8 @@ public abstract class Character extends Content implements AutoPermalink,
     @Required
     @ToolUi.RichText(toolbar = MediumRichTextToolbar.class)
     private String fullBiography;
+
+    private Set<Actor> actorsThatPlayedCharacter;
 
     private List<String> abilities;
 
@@ -126,6 +131,20 @@ public abstract class Character extends Content implements AutoPermalink,
 
     public void setFullBiography(String fullBiography) {
         this.fullBiography = fullBiography;
+    }
+
+    public Set<Actor> getActorsThatPlayedCharacter() {
+
+        if (actorsThatPlayedCharacter == null) {
+
+            actorsThatPlayedCharacter = new HashSet<>();
+        }
+
+        return actorsThatPlayedCharacter;
+    }
+
+    public void setActorsThatPlayedCharacter(Set<Actor> actorsThatPlayedCharacter) {
+        this.actorsThatPlayedCharacter = actorsThatPlayedCharacter;
     }
 
     public List<String> getAbilities() {
@@ -196,9 +215,9 @@ public abstract class Character extends Content implements AutoPermalink,
 
         // Get a set of all tags name keywords.
         keywords.addAll(asTaggableData().getTags().stream()
-            .map(Tag::getDisplayName)
-            .flatMap(tagDisplayName -> Arrays.stream(tagDisplayName.split(" ")))
-            .collect(Collectors.toSet()));
+                .map(Tag::getDisplayName)
+                .flatMap(tagDisplayName -> Arrays.stream(tagDisplayName.split(" ")))
+                .collect(Collectors.toSet()));
 
         return keywords;
     }
@@ -225,6 +244,13 @@ public abstract class Character extends Content implements AutoPermalink,
     @Override
     public String getSluggableSlugFallback() {
         return StringUtils.toNormalized(getLabel());
+    }
+
+    // Actor Association
+
+    @Override
+    public Set<Actor> getAssociatedActors() {
+        return getActorsThatPlayedCharacter();
     }
 
     // Helpers.

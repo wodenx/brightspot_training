@@ -1,0 +1,28 @@
+{{~#block "ActorPage" override="_SourceActorPage.hbs"~}}
+    {{#element "mainContent" noWith="true"}}
+        <div class="{{elementName}}" itemscope itemtype="http://schema.org/Person"{{extraAttributes}}>
+
+            {{#element "card" noWith="true"}}
+                <div class="{{elementName}}">
+
+                    {{#element "image"}}
+                        <div class="{{elementName}}" itemprop="image">{{this}}</div>
+                    {{/element}}
+
+                    <div class="{{elementName}}-data">
+
+                        {{#element "name"}}
+                            <h1 class="{{elementName}}" itemprop="name">{{this}}</h1>
+                        {{/element}}
+
+                    </div>
+                </div>
+            {{/element}}
+
+
+            {{#element "biography"}}
+                <div class="{{elementName}}" itemprop="description">{{this}}</div>
+            {{/element}}
+        </div>
+    {{/element}}
+{{~/block~}}
