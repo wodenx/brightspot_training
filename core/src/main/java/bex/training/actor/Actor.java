@@ -1,5 +1,10 @@
 package bex.training.actor;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import bex.training.util.TrainingUtils;
 import brightspot.core.image.ImageOption;
 import brightspot.core.link.Linkable;
@@ -7,14 +12,20 @@ import brightspot.core.permalink.AutoPermalink;
 import brightspot.core.promo.PromotableWithOverrides;
 import brightspot.core.share.Shareable;
 import brightspot.core.slug.Sluggable;
+import brightspot.core.tag.Tag;
 import brightspot.core.tag.Taggable;
 import brightspot.core.tool.MediumRichTextToolbar;
 import brightspot.core.tool.RichTextUtils;
 import brightspot.core.tool.SmallRichTextToolbar;
 import com.psddev.cms.db.Content;
+import com.psddev.cms.db.Seo;
 import com.psddev.cms.db.ToolUi;
 import com.psddev.dari.util.ObjectUtils;
+import com.psddev.dari.util.StringUtils;
 
+@Seo.TitleFields("getSeoTitle")
+@Seo.DescriptionFields("getSeoDescription")
+@Seo.KeywordsFields("getSeoKeywords")
 @ToolUi.Main
 public class Actor extends Content implements ActorOrCurrentActor,
         AutoPermalink,
@@ -104,6 +115,64 @@ public class Actor extends Content implements ActorOrCurrentActor,
     @Override
     public ImageOption getPromotableImageFallback() {
         return getImage();
+    }
+
+    //
+    // Shareable Implementation
+    //
+    @Override
+    public String getShareableTitleFallback() {
+        return getPromotableTitleFallback();
+    }
+
+    @Override
+    public String getShareableDescriptionFallback() {
+        return getPromotableDescriptionFallback();
+    }
+
+    @Override
+    public ImageOption getShareableImageFallback() {
+        return getPromotableImageFallback();
+    }
+
+    //
+    // Sluggable Implementation
+    //
+    @Override
+    public String getSluggableSlugFallback() {
+        return StringUtils.toNormalized(getName());
+    }
+
+    //
+    // SEO Support.
+    //
+    @Ignored(false)
+    @ToolUi.Hidden
+    public String getSeoTitle() {
+        return getName();
+    }
+
+    @Ignored(false)
+    @ToolUi.Hidden
+    public String getSeoDescription() {
+        return RichTextUtils.richTextToPlainText(getShortBiography());
+    }
+
+    @Ignored(false)
+    @ToolUi.Hidden
+    public Set<String> getSeoKeywords() {
+
+        Set<String> keywords = new HashSet<>();
+
+        keywords.add(getName());
+
+        // Get a set of all tags name keywords.
+        keywords.addAll(asTaggableData().getTags().stream()
+                .map(Tag::getDisplayName)
+                .flatMap(tagDisplayName -> Arrays.stream(tagDisplayName.split(" ")))
+                .collect(Collectors.toSet()));
+
+        return keywords;
     }
 
     @Ignored(false)
