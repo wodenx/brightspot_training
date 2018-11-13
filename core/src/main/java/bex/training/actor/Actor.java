@@ -13,6 +13,7 @@ import brightspot.core.tool.RichTextUtils;
 import brightspot.core.tool.SmallRichTextToolbar;
 import com.psddev.cms.db.Content;
 import com.psddev.cms.db.ToolUi;
+import com.psddev.dari.util.ObjectUtils;
 
 @ToolUi.Main
 public class Actor extends Content implements ActorOrCurrentActor,
@@ -31,11 +32,11 @@ public class Actor extends Content implements ActorOrCurrentActor,
 
     private ImageOption image;
 
-    @ToolUi.Placeholder(dynamicText = "${content.getShortBiographyFallback()}")
+    @ToolUi.Placeholder(dynamicText = "${content.getShortBiographyFallback()}", editable = true)
     @ToolUi.RichText(toolbar = SmallRichTextToolbar.class)
     private String shortBiography;
 
-    @ToolUi.RichText(toolbar = MediumRichTextToolbar.class)
+    @ToolUi.RichText(toolbar = MediumRichTextToolbar.class, inline = false)
     private String longBiography;
 
     public String getFirstName() {
@@ -63,7 +64,7 @@ public class Actor extends Content implements ActorOrCurrentActor,
     }
 
     public String getShortBiography() {
-        return shortBiography;
+        return ObjectUtils.firstNonBlank(shortBiography, getShortBiographyFallback());
     }
 
     public void setShortBiography(String shortBiography) {
@@ -92,6 +93,17 @@ public class Actor extends Content implements ActorOrCurrentActor,
     @Override
     public String getPromotableTitleFallback() {
         return getName();
+    }
+
+    @Override
+    public String getPromotableDescriptionFallback() {
+
+        return RichTextUtils.richTextToPlainText(getShortBiography());
+    }
+
+    @Override
+    public ImageOption getPromotableImageFallback() {
+        return getImage();
     }
 
     @Ignored(false)
